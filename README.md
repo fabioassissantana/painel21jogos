@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🎮 VortexAPI - Painel Administrativo
 
 <div align="center">
@@ -287,3 +288,6 @@ Este projeto está sob a licença **MIT**. Veja o arquivo [LICENSE](LICENSE) par
   <br>
   <sub>Powered by Laravel & FilamentPHP</sub>
 </div>
+=======
+# painelgames25
+>>>>>>> 77997d271ecb4a0927cd11324b49c97c6534c19f
