@@ -28,52 +28,59 @@ class AgentResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $appName = config('app.name');
+        // Limpar e padronizar o nome
+        $slug = strtolower(preg_replace('/[^a-z0-9]/i', '', str_replace('api', '', $appName)));
+        $randomCode = $slug . '-' . rand(1000, 9999);
+        $randomPassword = substr(bin2hex(random_bytes(4)), 0, 8);
+        $uuid1 = \Illuminate\Support\Str::uuid()->toString();
+        $uuid2 = \Illuminate\Support\Str::uuid()->toString();
         return $form
             ->schema([
                 Forms\Components\TextInput::make('agentCode')
                     ->label('Código do Agente')
-                    ->default(fn () => Str::slug(config('app.name')) . '-' . rand(100, 999))
-                    ->required()
-                    ->readOnly(),
+                    ->default($randomCode)
+                    ->required(),
                 Forms\Components\TextInput::make('senha')
                     ->label('Senha')
                     ->password()
-                    ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? bcrypt($state) : null)
-                    ->dehydrated(fn (?string $state): bool => filled($state))
-                    ->required(fn (string $operation): bool => $operation === 'create'),
-                Forms\Components\TextInput::make('agentToken')
-                    ->label('Agent Token')
-                    ->default(fn () => Str::uuid()->toString())
-                    ->required()
-                    ->readOnly(),
-                Forms\Components\TextInput::make('secretKey')
-                    ->label('Secret Key')
-                    ->default(fn () => Str::uuid()->toString())
-                    ->required()
-                    ->readOnly(),
+                    ->default($randomPassword)
+                    ->required(),
                 Forms\Components\TextInput::make('saldo')
                     ->label('Saldo')
                     ->numeric()
                     ->default(0),
+                Forms\Components\TextInput::make('agentToken')
+                    ->label('Agent Token')
+                    ->default($uuid1)
+                    ->required(),
+                Forms\Components\TextInput::make('secretKey')
+                    ->label('Secret Key')
+                    ->default($uuid2)
+                    ->required(),
                 Forms\Components\TextInput::make('probganho')
-                    ->label('Probabilidade de Ganho (%)')
-                    ->numeric()
+                    ->label('Probabilidade de Ganho')
                     ->default(0),
                 Forms\Components\TextInput::make('probbonus')
-                    ->label('Probabilidade de Bônus (%)')
-                    ->numeric()
+                    ->label('Probabilidade de Bônus')
+                    ->default(0),
+                Forms\Components\TextInput::make('probganhortp')
+                    ->label('Prob. Ganho RTP')
+                    ->default(0),
+                Forms\Components\TextInput::make('probganhoinfluencer')
+                    ->label('Prob. Ganho Influencer')
+                    ->default(0),
+                Forms\Components\TextInput::make('probbonusinfluencer')
+                    ->label('Prob. Bônus Influencer')
+                    ->default(0),
+                Forms\Components\TextInput::make('probganhoaposta')
+                    ->label('Prob. Ganho Aposta')
+                    ->default(0),
+                Forms\Components\TextInput::make('probganhosaldo')
+                    ->label('Prob. Ganho Saldo')
                     ->default(0),
                 Forms\Components\TextInput::make('callbackurl')
-                    ->label('URL de Callback')
-                    ->default('')
-                    ->url(),
-                Forms\Components\TextInput::make('ip')
-                    ->label('IP Permitido')
-                    ->default(''),
-                Forms\Components\TextInput::make('dias_restantes')
-                    ->label('Dias Restantes')
-                    ->numeric()
-                    ->default(0),
+                    ->label('Callback URL'),
             ]);
     }
 
@@ -83,7 +90,6 @@ class AgentResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
                 Tables\Columns\TextColumn::make('agentCode'),
-                Tables\Columns\TextColumn::make('email'),
                 Tables\Columns\TextColumn::make('senha'),
                 Tables\Columns\TextColumn::make('saldo'),
                 Tables\Columns\TextColumn::make('agentToken'),
@@ -96,9 +102,6 @@ class AgentResource extends Resource
                 Tables\Columns\TextColumn::make('probganhoaposta'),
                 Tables\Columns\TextColumn::make('probganhosaldo'),
                 Tables\Columns\TextColumn::make('callbackurl'),
-                Tables\Columns\TextColumn::make('ip'),
-                Tables\Columns\TextColumn::make('dias_restantes'),
-                Tables\Columns\TextColumn::make('created_at'),
             ])
             ->filters([
                 //

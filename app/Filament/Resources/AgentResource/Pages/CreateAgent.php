@@ -18,8 +18,33 @@ class CreateAgent extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
+        // Gerar senha aleatória se não for informada
+        if (empty($data['senha'])) {
+            $data['senha'] = substr(bin2hex(random_bytes(4)), 0, 8); // 8 caracteres
+        }
         $this->plainPassword = $data['senha']; // Armazena a senha em texto puro
         $data['senha'] = bcrypt($data['senha']);
+
+        // Preencher automaticamente campos obrigatórios se não vierem do form
+        if (empty($data['agentCode'])) {
+            $data['agentCode'] = 'agent-' . rand(1000, 9999);
+        }
+        if (empty($data['agentToken'])) {
+            $data['agentToken'] = \Illuminate\Support\Str::uuid()->toString();
+        }
+        if (empty($data['secretKey'])) {
+            $data['secretKey'] = \Illuminate\Support\Str::uuid()->toString();
+        }
+        // Garantir defaults para campos numéricos
+        $data['saldo'] = $data['saldo'] ?? 0;
+        $data['probganho'] = $data['probganho'] ?? 0;
+        $data['probbonus'] = $data['probbonus'] ?? 0;
+        $data['probganhortp'] = $data['probganhortp'] ?? 0;
+        $data['probganhoinfluencer'] = $data['probganhoinfluencer'] ?? 0;
+        $data['probbonusinfluencer'] = $data['probbonusinfluencer'] ?? 0;
+        $data['probganhoaposta'] = $data['probganhoaposta'] ?? 0;
+        $data['probganhosaldo'] = $data['probganhosaldo'] ?? 0;
+        $data['callbackurl'] = $data['callbackurl'] ?? '';
 
         return static::getModel()::create($data);
     }

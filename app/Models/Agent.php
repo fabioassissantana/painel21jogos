@@ -14,8 +14,6 @@ class Agent extends Authenticatable
 
     protected $fillable = [
         'agentCode',
-        'email',
-        'senha',
         'saldo',
         'agentToken',
         'secretKey',
@@ -27,9 +25,7 @@ class Agent extends Authenticatable
         'probganhoaposta',
         'probganhosaldo',
         'callbackurl',
-        'ip',
-        'dias_restantes',
-        'created_at',
+        'senha',
     ];
 
     protected $hidden = [
