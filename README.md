@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🎮 VortexAPI - Painel Administrativo
 
 <div align="center">
