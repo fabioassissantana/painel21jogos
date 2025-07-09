@@ -2,7 +2,7 @@
 # 🎮 VortexAPI - Painel Administrativo
 
 <div align="center">
-  <img src="public/storage/images/vortexapi.png" alt="VortexAPI Logo" width="200"/>
+  <img src="https://painel.pgloveyuo.com/storage/images/vortexapi.png" alt="VortexAPI Logo" width="200"/>
   <br>
   <strong>Plataforma de Gestão Completa para APIs de Jogos</strong>
 </div>
