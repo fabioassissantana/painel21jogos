@@ -7,10 +7,7 @@ use App\Models\Setting; // Import the Setting model
 use Illuminate\Support\Facades\Storage; // Import the Storage facade
 
 Route::get('/', function () {
-    $logoPath = Setting::where('key', 'logo_path')->first();
-    $logoUrl = $logoPath ? Storage::url($logoPath->value) : null; // Get the URL for the logo
-
-    return view('welcome', compact('logoUrl'));
+    return redirect()->route('filament.agent.auth.login');
 });
 
 // Rotas de otimização do painel admin
